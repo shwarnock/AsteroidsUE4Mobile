@@ -1,0 +1,3 @@
+C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Source\Asteroids\Asteroids.Build.cs
+C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Source\Asteroids.Target.cs
+C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Source\AsteroidsEditor.Target.cs

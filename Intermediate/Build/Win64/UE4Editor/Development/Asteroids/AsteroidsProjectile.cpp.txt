@@ -1,0 +1,7 @@
+C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Development\Asteroids\Definitions.Asteroids.h
+c:\users\swarn\onedrive\documents\unreal projects\asteroids\source\asteroids\AsteroidsProjectile.h
+C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Inc\Asteroids\AsteroidsProjectile.generated.h
+C:\Program Files\Epic Games\UE_4.22\Engine\Source\Runtime\Engine\Classes\GameFramework/ProjectileMovementComponent.h
+C:\Program Files\Epic Games\UE_4.22\Engine\Source\Runtime\Engine\Classes\GameFramework/MovementComponent.h
+C:\Program Files\Epic Games\UE_4.22\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\MovementComponent.generated.h
+C:\Program Files\Epic Games\UE_4.22\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\ProjectileMovementComponent.generated.h

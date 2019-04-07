@@ -1,0 +1,20 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-Asteroids-0005.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\AsteroidsEditor\Development\Engine\SharedPCH.Engine.h.obj"
+"C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Development\Asteroids\Asteroids.cpp.obj"
+"C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Development\Asteroids\AsteroidsGameMode.cpp.obj"
+"C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Development\Asteroids\AsteroidsPawn.cpp.obj"
+"C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Development\Asteroids\AsteroidsProjectile.cpp.obj"
+"C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Development\Asteroids\Asteroids.init.gen.cpp.obj"
+"C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Development\Asteroids\AsteroidsGameMode.gen.cpp.obj"
+"C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Development\Asteroids\AsteroidsPawn.gen.cpp.obj"
+"C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Development\Asteroids\AsteroidsProjectile.gen.cpp.obj"
+"C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Development\Asteroids\Default.rc2.res"
+/OUT:"C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Development\Asteroids\UE4Editor-Asteroids-0005.lib"
+/INCLUDE:IMPLEMENT_MODULE_Asteroids

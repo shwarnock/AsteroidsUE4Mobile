@@ -1,0 +1,15 @@
+C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Development\Asteroids\Definitions.Asteroids.h
+c:\users\swarn\onedrive\documents\unreal projects\asteroids\source\asteroids\AsteroidsGameMode.h
+C:\Program Files\Epic Games\UE_4.22\Engine\Source\Runtime\Engine\Classes\GameFramework/GameModeBase.h
+C:\Program Files\Epic Games\UE_4.22\Engine\Source\Runtime\Engine\Classes\Engine/ServerStatReplicator.h
+C:\Program Files\Epic Games\UE_4.22\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\ServerStatReplicator.generated.h
+C:\Program Files\Epic Games\UE_4.22\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\GameModeBase.generated.h
+C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Inc\Asteroids\AsteroidsGameMode.generated.h
+c:\users\swarn\onedrive\documents\unreal projects\asteroids\source\asteroids\AsteroidsPawn.h
+c:\users\swarn\onedrive\documents\unreal projects\asteroids\source\asteroids\AsteroidsProjectile.h
+C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Inc\Asteroids\AsteroidsProjectile.generated.h
+C:\Program Files\Epic Games\UE_4.22\Engine\Source\Runtime\Engine\Classes\GameFramework/Character.h
+C:\Program Files\Epic Games\UE_4.22\Engine\Source\Runtime\Engine\Classes\GameFramework/RootMotionSource.h
+C:\Program Files\Epic Games\UE_4.22\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\RootMotionSource.generated.h
+C:\Program Files\Epic Games\UE_4.22\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\Character.generated.h
+C:\Users\swarn\OneDrive\Documents\Unreal Projects\Asteroids\Intermediate\Build\Win64\UE4Editor\Inc\Asteroids\AsteroidsPawn.generated.h
