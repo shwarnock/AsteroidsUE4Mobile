@@ -19,7 +19,7 @@ const FName AAsteroidsPawn::FireBinding("Fire");
 
 AAsteroidsPawn::AAsteroidsPawn()
 {	
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> ShipMesh(TEXT("/Game/TwinStick/Meshes/TwinStickUFO.TwinStickUFO"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> ShipMesh(TEXT("/Game/Asteroids/Meshes/TwinStickUFO.TwinStickUFO"));
 	// Create the mesh component
 	ShipMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShipMesh"));
 	RootComponent = ShipMeshComponent;
@@ -27,7 +27,7 @@ AAsteroidsPawn::AAsteroidsPawn()
 	ShipMeshComponent->SetStaticMesh(ShipMesh.Object);
 	
 	// Cache our sound effect
-	static ConstructorHelpers::FObjectFinder<USoundBase> FireAudio(TEXT("/Game/TwinStick/Audio/TwinStickFire.TwinStickFire"));
+	static ConstructorHelpers::FObjectFinder<USoundBase> FireAudio(TEXT("/Game/Asteroids/Audio/TwinStickFire.TwinStickFire"));
 	FireSound = FireAudio.Object;
 
 	// Create a camera boom...
@@ -56,55 +56,57 @@ void AAsteroidsPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	check(PlayerInputComponent);
 
 	// set up gameplay key bindings
-	PlayerInputComponent->BindAxis(MoveForwardBinding);
-	PlayerInputComponent->BindAxis(MoveRightBinding);
+	PlayerInputComponent->BindAxis("MoveForward", this, &AAsteroidsPawn::HandleMovement);
+	PlayerInputComponent->BindAxis("Rotate", this, &AAsteroidsPawn::HandleRotation);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AAsteroidsPawn::FireShot);
 }
 
-void AAsteroidsPawn::HandleRotation()
+void AAsteroidsPawn::HandleMovement(float movement)
 {
-	
-}
-
-void AAsteroidsPawn::HandleAccelerate(FVector MoveDirection)
-{
-	
-	if (MoveSpeed.X < MaxSpeed.X && MoveSpeed.Y < MaxSpeed.Y)
+	if (movement == 1)
 	{
-		// Add to velocity vector (using minus for y because Direct2D uses 0,0 as the top-left corner instead of bottom-left)
-		MoveSpeed.X += MoveDirection.X * 0.2;
-		MoveSpeed.Y -= MoveDirection.Y * 0.2;
+		HandleAcceleration();
 	}
-}
+	FVector currentLocation = GetActorLocation();
+	FVector newLocation = FVector(currentLocation.X + MoveSpeed.X, currentLocation.Y + MoveSpeed.Y, 215);
+	SetActorLocation(newLocation);
 
-void AAsteroidsPawn::HandleMovement(FVector MoveDirection, float DeltaSeconds)
-{
 	//Simplified Stokes Law
 	MoveSpeed.X = MoveSpeed.X - MoveSpeed.X * 0.02;
 	MoveSpeed.Y = MoveSpeed.Y - MoveSpeed.Y * 0.02;
+}
 
-	const FVector Movement = MoveDirection * MoveSpeed * DeltaSeconds;
-
-	// If non-zero size, move this actor
-	if (Movement.SizeSquared() > 0.0f)
+void AAsteroidsPawn::HandleAcceleration()
+{
+	if (MoveSpeed.X < MaxSpeed.X && MoveSpeed.Y < MaxSpeed.Y)
 	{
-		SetActorLocation(Movement);
+		// Create a normalized vector in the direction of travel
+		FVector direction = GetActorForwardVector();
+
+		// Add to velocity vector (using minus for y because Direct2D uses 0,0 as the top-left corner instead of bottom-left)
+		MoveSpeed.X += direction.X;
+		MoveSpeed.Y += direction.Y;
+	}
+}
+
+void AAsteroidsPawn::HandleRotation(float rotation)
+{
+	if (rotation == -1)
+	{
+		FRotator currentRotation = GetActorRotation();
+		currentRotation.Yaw -= 5.0f;
+		SetActorRotation(currentRotation);
+	}
+	else if (rotation == 1)
+	{
+		FRotator currentRotation = GetActorRotation();
+		currentRotation.Yaw += 5.0f;
+		SetActorRotation(currentRotation);
 	}
 }
 
 void AAsteroidsPawn::Tick(float DeltaSeconds)
 {
-	HandleRotation();
-
-	const float ForwardValue = GetInputAxisValue(MoveForwardBinding);
-
-	// Clamp max size so that (X=1, Y=1) doesn't cause faster movement in diagonal directions
-	const FVector MoveDirection = FVector(ForwardValue, 0, 0);
-
-	HandleAccelerate(MoveDirection);
-
-	HandleMovement(MoveDirection, DeltaSeconds);
-
 	for (int i = bullets.Num() - 1; i >= 0; --i)
 	{
 		if (bullets[i]->IsPendingKill() || !bullets[i]->IsValidLowLevel())

@@ -60,7 +60,7 @@ public:
 	static const FName FireBinding;
 
 private:
-	const FVector MaxSpeed = FVector(1000.0f, 1000.0f, 0.0f);
+	const FVector MaxSpeed = FVector(1000.0, 1000.0f, 0);
 
 	const int MAX_BULLETS = 2;
 	TArray<AAsteroidsProjectile*> bullets;
@@ -71,11 +71,9 @@ private:
 	/** Handle for efficient management of ShotTimerExpired timer */
 	FTimerHandle TimerHandle_ShotTimerExpired;
 
-	void HandleRotation();
-
-	void HandleAccelerate(FVector MoveDirection);
-
-	void HandleMovement(FVector MoveDirection, float DeltaSeconds);
+	void HandleMovement(float movement);
+	void HandleRotation(float rotation);
+	void HandleAcceleration();
 
 public:
 	/** Returns ShipMeshComponent subobject **/
