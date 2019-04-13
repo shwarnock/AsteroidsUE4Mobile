@@ -9,7 +9,7 @@
 class UProjectileMovementComponent;
 class UStaticMeshComponent;
 
-UCLASS(config=Game)
+UCLASS(config = Game)
 class AAsteroidsProjectile : public AActor
 {
 	GENERATED_BODY()

@@ -7,7 +7,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Engine/StaticMesh.h"
 
-AAsteroidsProjectile::AAsteroidsProjectile() 
+AAsteroidsProjectile::AAsteroidsProjectile()
 {
 	// Static reference to the mesh to use for the projectile
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> ProjectileMeshAsset(TEXT("/Game/Asteroids/Meshes/TwinStickProjectile.TwinStickProjectile"));

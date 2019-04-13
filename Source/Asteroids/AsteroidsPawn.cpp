@@ -4,7 +4,6 @@
 #include "AsteroidsProjectile.h"
 #include "TimerManager.h"
 #include "UObject/ConstructorHelpers.h"
-#include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -18,30 +17,17 @@ const FName AAsteroidsPawn::MoveRightBinding("MoveRight");
 const FName AAsteroidsPawn::FireBinding("Fire");
 
 AAsteroidsPawn::AAsteroidsPawn()
-{	
+{
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> ShipMesh(TEXT("/Game/Asteroids/Meshes/TwinStickUFO.TwinStickUFO"));
 	// Create the mesh component
 	ShipMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShipMesh"));
 	RootComponent = ShipMeshComponent;
 	ShipMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 	ShipMeshComponent->SetStaticMesh(ShipMesh.Object);
-	
+
 	// Cache our sound effect
 	static ConstructorHelpers::FObjectFinder<USoundBase> FireAudio(TEXT("/Game/Asteroids/Audio/TwinStickFire.TwinStickFire"));
 	FireSound = FireAudio.Object;
-
-	// Create a camera boom...
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->bAbsoluteRotation = true; // Don't want arm to rotate when ship does
-	CameraBoom->TargetArmLength = 1200.f;
-	CameraBoom->RelativeRotation = FRotator(-80.f, 0.f, 0.f);
-	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
-
-	// Create a camera...
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
-	CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	CameraComponent->bUsePawnControlRotation = false;	// Camera does not rotate relative to arm
 
 	// Movement
 	MoveSpeed = FVector::ZeroVector;
@@ -68,7 +54,7 @@ void AAsteroidsPawn::HandleMovement(float movement)
 		HandleAcceleration();
 	}
 	FVector currentLocation = GetActorLocation();
-	FVector newLocation = FVector(currentLocation.X + MoveSpeed.X, currentLocation.Y + MoveSpeed.Y, 215);
+	FVector newLocation = FVector(currentLocation.X + MoveSpeed.X, currentLocation.Y + MoveSpeed.Y, -40);
 	SetActorLocation(newLocation);
 
 	//Simplified Stokes Law
@@ -83,9 +69,8 @@ void AAsteroidsPawn::HandleAcceleration()
 		// Create a normalized vector in the direction of travel
 		FVector direction = GetActorForwardVector();
 
-		// Add to velocity vector (using minus for y because Direct2D uses 0,0 as the top-left corner instead of bottom-left)
-		MoveSpeed.X += direction.X;
-		MoveSpeed.Y += direction.Y;
+		MoveSpeed.X += direction.X * .5;
+		MoveSpeed.Y += direction.Y * .5;
 	}
 }
 
@@ -94,13 +79,13 @@ void AAsteroidsPawn::HandleRotation(float rotation)
 	if (rotation == -1)
 	{
 		FRotator currentRotation = GetActorRotation();
-		currentRotation.Yaw -= 5.0f;
+		currentRotation.Yaw += 5.0f;
 		SetActorRotation(currentRotation);
 	}
 	else if (rotation == 1)
 	{
 		FRotator currentRotation = GetActorRotation();
-		currentRotation.Yaw += 5.0f;
+		currentRotation.Yaw -= 5.0f;
 		SetActorRotation(currentRotation);
 	}
 }
@@ -151,4 +136,3 @@ void AAsteroidsPawn::ShotTimerExpired()
 {
 	bCanFire = true;
 }
-
