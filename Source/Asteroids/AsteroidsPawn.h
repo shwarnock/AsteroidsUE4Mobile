@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AsteroidsProjectile.h"
 #include "GameFramework/Character.h"
+#include "AsteroidsProjectile.h"
 #include "AsteroidsPawn.generated.h"
 
 UCLASS(Blueprintable)
@@ -20,9 +20,9 @@ public:
 	AAsteroidsPawn();
 
 	/** Offset from the ships location to spawn projectiles */
-	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite )
 	FVector GunOffset;
-
+	
 	/* How fast the weapon will fire */
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	float FireRate;
@@ -30,6 +30,9 @@ public:
 	/* The speed our ship moves around the level */
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	FVector MoveSpeed;
+
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+	FRotator Rotation;
 
 	/** Sound to play each time we fire */
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
@@ -52,10 +55,17 @@ public:
 	static const FName FireBinding;
 
 private:
-	const FVector MaxSpeed = FVector(1000.0, 1000.0f, 0);
+	const FVector MaxSpeed = FVector(1000.0, 1000.0, 0);
 
 	const int MAX_BULLETS = 2;
 	TArray<AAsteroidsProjectile*> bullets;
+
+	void HandleAcceleration(FVector direction, float DeltaSeconds);
+	void CheckForOffScreen();
+
+	float MAX_SCREEN_WIDTH = 3200;
+	float MAX_SCREEN_HEIGHT;
+	float const SCREEN_BUFFER = 20.0f;
 
 	/* Flag to control firing  */
 	uint32 bCanFire : 1;
@@ -63,11 +73,10 @@ private:
 	/** Handle for efficient management of ShotTimerExpired timer */
 	FTimerHandle TimerHandle_ShotTimerExpired;
 
-	void HandleMovement(float movement);
-	void HandleRotation(float rotation);
-	void HandleAcceleration();
-
 public:
 	/** Returns ShipMeshComponent subobject **/
 	FORCEINLINE class UStaticMeshComponent* GetShipMeshComponent() const { return ShipMeshComponent; }
+
+	void SetScreenSize();
 };
+

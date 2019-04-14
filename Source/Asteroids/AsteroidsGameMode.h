@@ -13,6 +13,7 @@ class AAsteroidsGameMode : public AGameModeBase
 
 public:
 	AAsteroidsGameMode();
+
 };
 
 

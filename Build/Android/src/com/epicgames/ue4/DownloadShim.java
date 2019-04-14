@@ -1,10 +1,10 @@
 package com.epicgames.ue4;
 
-import com.YourCompany.Asteroids.OBBDownloaderService;
-import com.YourCompany.Asteroids.DownloaderActivity;
+import com.YourCompany.MobileAsteroids.OBBDownloaderService;
+import com.YourCompany.MobileAsteroids.DownloaderActivity;
 import android.app.Activity;
 import com.google.android.vending.expansion.downloader.Helpers;
-import com.YourCompany.Asteroids.OBBData;
+import com.YourCompany.MobileAsteroids.OBBData;
 
 
 public class DownloadShim
