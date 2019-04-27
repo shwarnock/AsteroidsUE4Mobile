@@ -10,11 +10,10 @@
 #include "Engine/StaticMesh.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
-#include "Engine.h"
+#include "OffScreenUtil.h"
 
 const FName AAsteroidsPawn::MoveForwardBinding("MoveForward");
 const FName AAsteroidsPawn::MoveRightBinding("MoveRight");
-const FName AAsteroidsPawn::FireBinding("Fire");
 
 AAsteroidsPawn::AAsteroidsPawn()
 {	
@@ -24,6 +23,8 @@ AAsteroidsPawn::AAsteroidsPawn()
 	RootComponent = ShipMeshComponent;
 	ShipMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 	ShipMeshComponent->SetStaticMesh(ShipMesh.Object);
+	ShipMeshComponent->SetWorldLocation(FVector::ZeroVector);
+	RootComponent->SetWorldLocation(FVector::ZeroVector);
 	SetActorLocation(FVector::ZeroVector);
 	
 	// Cache our sound effect
@@ -39,19 +40,6 @@ AAsteroidsPawn::AAsteroidsPawn()
 	bCanFire = true;
 }
 
-void AAsteroidsPawn::SetScreenSize()
-{
-	FVector2D Result = FVector2D(0, 0);
-
-	if (GEngine && GEngine->GameViewport)
-	{
-		GEngine->GameViewport->GetViewportSize( /*out*/Result);	
-	}
-
-	MAX_SCREEN_HEIGHT = Result.Y;
-	MAX_SCREEN_WIDTH = Result.X;
-}
-
 void AAsteroidsPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	check(PlayerInputComponent);
@@ -59,7 +47,6 @@ void AAsteroidsPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	// set up gameplay key bindings
 	PlayerInputComponent->BindAxis(MoveForwardBinding);
 	PlayerInputComponent->BindAxis(MoveRightBinding);
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AAsteroidsPawn::FireShot);
 }
 
 void AAsteroidsPawn::HandleAcceleration(FVector direction, float DeltaSeconds)
@@ -104,52 +91,7 @@ void AAsteroidsPawn::Tick(float DeltaSeconds)
 		}
 	}
 
-	CheckForOffScreen();
-}
-
-void AAsteroidsPawn::CheckForOffScreen() {
-	FVector projectileLocation = GetActorLocation();
-
-	FVector2D ScreenLocation = FVector2D::ZeroVector;
-	APlayerController* playerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	FVector dir = FVector::ZeroVector;
-	playerController->ProjectWorldLocationToScreen(projectileLocation, ScreenLocation);
-
-	FVector2D Result = FVector2D(0, 0);
-	FVector newLocation = FVector::ZeroVector;
-
-	if (GEngine && GEngine->GameViewport)
-	{
-		GEngine->GameViewport->GetViewportSize( /*out*/Result);
-	}
-
-	MAX_SCREEN_HEIGHT = Result.Y;
-	MAX_SCREEN_WIDTH = Result.X;
-
-	if (ScreenLocation.X > MAX_SCREEN_WIDTH + SCREEN_BUFFER)
-	{
-		playerController->DeprojectScreenPositionToWorld(-SCREEN_BUFFER, ScreenLocation.Y, newLocation, dir);
-		newLocation.Z = 0.0f;
-		SetActorLocation(newLocation);
-	}
-	else if (ScreenLocation.X < -SCREEN_BUFFER)
-	{
-		playerController->DeprojectScreenPositionToWorld(MAX_SCREEN_WIDTH + SCREEN_BUFFER, ScreenLocation.Y, newLocation, dir);
-		newLocation.Z = 0.0f;
-		SetActorLocation(newLocation);
-	}
-	else if (ScreenLocation.Y > MAX_SCREEN_HEIGHT + SCREEN_BUFFER)
-	{
-		playerController->DeprojectScreenPositionToWorld(ScreenLocation.X, -SCREEN_BUFFER, newLocation, dir);
-		newLocation.Z = 0.0f;
-		SetActorLocation(newLocation);
-	}
-	else if (ScreenLocation.Y < -SCREEN_BUFFER)
-	{
-		playerController->DeprojectScreenPositionToWorld(ScreenLocation.X, MAX_SCREEN_HEIGHT + SCREEN_BUFFER, newLocation, dir);
-		newLocation.Z = 0.0f;
-		SetActorLocation(newLocation);
-	}
+	OffScreenUtil::CheckForOffScreen(this);
 }
 
 void AAsteroidsPawn::FireShot()

@@ -35,11 +35,6 @@ public:
 	FORCEINLINE UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
 
 private:
-	void CheckForOffScreen();
 	virtual void Tick(float DeltaTime) override;
-
-	float MAX_SCREEN_WIDTH;
-	float MAX_SCREEN_HEIGHT;
-	const float SCREEN_BUFFER = 20.0f;
 };
 

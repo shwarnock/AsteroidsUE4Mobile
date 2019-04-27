@@ -38,13 +38,14 @@ public:
 	UPROPERTY(Category = Audio, EditAnywhere, BlueprintReadWrite)
 	class USoundBase* FireSound;
 
+	UFUNCTION(BlueprintCallable, Category = "Fire")
+	void FireShot();
+	
 	// Begin Actor Interface
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
-	// End Actor Interface
 
-	/* Fire a shot in the specified direction */
-	void FireShot();
+	// End Actor Interface
 
 	/* Handler for the fire timer expiry */
 	void ShotTimerExpired();
@@ -61,11 +62,6 @@ private:
 	TArray<AAsteroidsProjectile*> bullets;
 
 	void HandleAcceleration(FVector direction, float DeltaSeconds);
-	void CheckForOffScreen();
-
-	float MAX_SCREEN_WIDTH = 3200;
-	float MAX_SCREEN_HEIGHT;
-	float const SCREEN_BUFFER = 20.0f;
 
 	/* Flag to control firing  */
 	uint32 bCanFire : 1;
@@ -76,7 +72,4 @@ private:
 public:
 	/** Returns ShipMeshComponent subobject **/
 	FORCEINLINE class UStaticMeshComponent* GetShipMeshComponent() const { return ShipMeshComponent; }
-
-	void SetScreenSize();
 };
-

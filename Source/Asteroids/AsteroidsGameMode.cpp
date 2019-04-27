@@ -2,7 +2,6 @@
 
 #include "AsteroidsGameMode.h"
 #include "AsteroidsPawn.h"
-#include "AsteroidsPlayerController.h"
 
 AAsteroidsGameMode::AAsteroidsGameMode()
 {

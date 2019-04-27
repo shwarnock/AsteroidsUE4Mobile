@@ -7,6 +7,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Engine/StaticMesh.h"
 #include "Engine.h"
+#include "OffScreenUtil.h"
 
 AAsteroidsProjectile::AAsteroidsProjectile() 
 {
@@ -41,49 +42,7 @@ AAsteroidsProjectile::AAsteroidsProjectile()
 
 void AAsteroidsProjectile::Tick(float DeltaTime) 
 {
-	CheckForOffScreen();
-}
-
-
-void AAsteroidsProjectile::CheckForOffScreen() {
-
-	FVector2D ScreenLocation = FVector2D::ZeroVector;
-	APlayerController* playerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	FVector dir = FVector::ZeroVector;
-	FVector projectileLocation = GetActorLocation();
-	playerController->ProjectWorldLocationToScreen(projectileLocation, ScreenLocation);
-
-	FVector2D Result = FVector2D(0, 0);
-	FVector newLocation = FVector::ZeroVector;
-
-	if (GEngine && GEngine->GameViewport)
-	{
-		GEngine->GameViewport->GetViewportSize( /*out*/Result);
-	}
-
-	MAX_SCREEN_HEIGHT = Result.Y;
-	MAX_SCREEN_WIDTH = Result.X;
-
-	if (ScreenLocation.X > MAX_SCREEN_WIDTH + SCREEN_BUFFER)
-	{
-		playerController->DeprojectScreenPositionToWorld(-SCREEN_BUFFER, ScreenLocation.Y, newLocation, dir);
-		SetActorLocation(newLocation);
-	}
-	else if (ScreenLocation.X < -SCREEN_BUFFER)
-	{
-		playerController->DeprojectScreenPositionToWorld(MAX_SCREEN_WIDTH + SCREEN_BUFFER, ScreenLocation.Y, newLocation, dir);
-		SetActorLocation(newLocation);
-	}
-	else if (ScreenLocation.Y > MAX_SCREEN_HEIGHT + SCREEN_BUFFER)
-	{
-		playerController->DeprojectScreenPositionToWorld(ScreenLocation.X, -SCREEN_BUFFER, newLocation, dir);
-		SetActorLocation(newLocation);
-	}
-	else if (ScreenLocation.Y < -SCREEN_BUFFER)
-	{
-		playerController->DeprojectScreenPositionToWorld(ScreenLocation.X, MAX_SCREEN_HEIGHT + SCREEN_BUFFER, newLocation, dir);
-		SetActorLocation(newLocation);
-	}
+	OffScreenUtil::CheckForOffScreen(this);
 }
 
 void AAsteroidsProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
