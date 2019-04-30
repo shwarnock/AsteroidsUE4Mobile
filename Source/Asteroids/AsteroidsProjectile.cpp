@@ -42,7 +42,7 @@ AAsteroidsProjectile::AAsteroidsProjectile()
 
 void AAsteroidsProjectile::Tick(float DeltaTime) 
 {
-	OffScreenUtil::CheckForOffScreen(this);
+	UOffScreenUtil::CheckForOffScreen(this);
 }
 
 void AAsteroidsProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)

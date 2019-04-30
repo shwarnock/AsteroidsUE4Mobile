@@ -4,17 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "Engine.h"
+#include "Object.h"
+#include "OffScreenUtil.generated.h"
 
 /**
  * Utility class for checking if an actor is off the screen
  */
-class OffScreenUtil
+UCLASS(Blueprintable)
+class UOffScreenUtil : public UObject
 {
+public:
+	GENERATED_BODY()
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "Screen Check")
+	static void CheckForOffScreen(AActor* actor);
+
 private:
 	static void SetScreenSize();
-	static FVector2D GetScreenSize();
 	static FVector2D ScreenSize;
 	static float ScreenBuffer;
-public:
-	static void CheckForOffScreen(AActor* actor);
 };

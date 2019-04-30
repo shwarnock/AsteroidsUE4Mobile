@@ -4,10 +4,10 @@
 #include "OffScreenUtil.h"
 
 
-FVector2D OffScreenUtil::ScreenSize = FVector2D(0, 0);
-float OffScreenUtil::ScreenBuffer = 20.0f;
+FVector2D UOffScreenUtil::ScreenSize = FVector2D(0, 0);
+float UOffScreenUtil::ScreenBuffer = 20.0f;
 
-void OffScreenUtil::SetScreenSize()
+void UOffScreenUtil::SetScreenSize()
 {
 	FVector2D Result = FVector2D(0, 0);
 	FVector newLocation = FVector::ZeroVector;
@@ -21,7 +21,7 @@ void OffScreenUtil::SetScreenSize()
 	ScreenSize.Y = Result.Y;
 }
 
-void OffScreenUtil::CheckForOffScreen(AActor* actor)
+void UOffScreenUtil::CheckForOffScreen(AActor* actor)
 {
 	FVector2D ScreenLocation = FVector2D::ZeroVector;
 	APlayerController* playerController = UGameplayStatics::GetPlayerController(actor->GetWorld(), 0);

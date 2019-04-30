@@ -2,10 +2,8 @@
 #include "AsteroidsProjectile.h"
 #include "TimerManager.h"
 #include "UObject/ConstructorHelpers.h"
-#include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/InputComponent.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "Engine/CollisionProfile.h"
 #include "Engine/StaticMesh.h"
 #include "Kismet/GameplayStatics.h"
@@ -91,7 +89,7 @@ void AAsteroidsPawn::Tick(float DeltaSeconds)
 		}
 	}
 
-	OffScreenUtil::CheckForOffScreen(this);
+	UOffScreenUtil::CheckForOffScreen(this);
 }
 
 void AAsteroidsPawn::FireShot()
