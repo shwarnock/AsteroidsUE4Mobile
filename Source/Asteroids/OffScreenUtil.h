@@ -18,7 +18,10 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Screen Check")
-	static void CheckForOffScreen(AActor* actor);
+	static void UpdateActorLocationWhenOffScreen(AActor* actor);
+
+	UFUNCTION(BlueprintCallable, Category = "Screen Check")
+	static bool CheckForOffScreen(AActor* actor);
 
 private:
 	static void SetScreenSize();

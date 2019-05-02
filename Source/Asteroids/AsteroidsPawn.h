@@ -19,6 +19,15 @@ class AAsteroidsPawn : public APawn
 public:
 	AAsteroidsPawn();
 
+	UPROPERTY(Category = Gameplay, BlueprintReadOnly)
+	float playerCurrentHealth;
+	
+	UPROPERTY(Category = gameplay, BlueprintReadOnly)
+	float playerMaxHealth;
+
+	UFUNCTION(BlueprintCallable, Category = Gameplay)
+	void DealDamage(float damageAmount);
+
 	/** Offset from the ships location to spawn projectiles */
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite )
 	FVector GunOffset;

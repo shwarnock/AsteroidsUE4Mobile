@@ -21,7 +21,27 @@ void UOffScreenUtil::SetScreenSize()
 	ScreenSize.Y = Result.Y;
 }
 
-void UOffScreenUtil::CheckForOffScreen(AActor* actor)
+bool UOffScreenUtil::CheckForOffScreen(AActor* actor)
+{
+	FVector2D ScreenLocation = FVector2D::ZeroVector;
+	APlayerController* playerController = UGameplayStatics::GetPlayerController(actor->GetWorld(), 0);
+	FVector actorLocation = actor->GetActorLocation();
+	playerController->ProjectWorldLocationToScreen(actorLocation, ScreenLocation);;
+
+	if (ScreenSize.X == 0 || ScreenSize.Y == 0)
+	{
+		SetScreenSize();
+	}
+
+	if (ScreenSize.X < ScreenLocation.X || ScreenSize.Y < ScreenLocation.Y || 0 > ScreenLocation.X || 0 > ScreenLocation.Y)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void UOffScreenUtil::UpdateActorLocationWhenOffScreen(AActor* actor)
 {
 	FVector2D ScreenLocation = FVector2D::ZeroVector;
 	APlayerController* playerController = UGameplayStatics::GetPlayerController(actor->GetWorld(), 0);

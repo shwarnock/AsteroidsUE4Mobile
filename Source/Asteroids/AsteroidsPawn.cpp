@@ -36,6 +36,9 @@ AAsteroidsPawn::AAsteroidsPawn()
 	GunOffset = FVector(90.f, 0.f, 0.f);
 	FireRate = 0.1f;
 	bCanFire = true;
+
+	playerMaxHealth = 100.0f;
+	playerCurrentHealth = 100.0f;
 }
 
 void AAsteroidsPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -45,6 +48,11 @@ void AAsteroidsPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	// set up gameplay key bindings
 	PlayerInputComponent->BindAxis(MoveForwardBinding);
 	PlayerInputComponent->BindAxis(MoveRightBinding);
+}
+
+void AAsteroidsPawn::DealDamage(float damage)
+{
+	playerCurrentHealth -= damage;
 }
 
 void AAsteroidsPawn::HandleAcceleration(FVector direction, float DeltaSeconds)
@@ -89,7 +97,7 @@ void AAsteroidsPawn::Tick(float DeltaSeconds)
 		}
 	}
 
-	UOffScreenUtil::CheckForOffScreen(this);
+	UOffScreenUtil::UpdateActorLocationWhenOffScreen(this);
 }
 
 void AAsteroidsPawn::FireShot()
