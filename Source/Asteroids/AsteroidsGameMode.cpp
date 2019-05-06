@@ -7,5 +7,11 @@ AAsteroidsGameMode::AAsteroidsGameMode()
 {
 	// set default pawn class to our character class
 	DefaultPawnClass = AAsteroidsPawn::StaticClass();
+	Messanger = NewObject<UMessanger>();
+}
+
+UMessanger* AAsteroidsGameMode::GetMessanger()
+{
+	return Messanger;
 }
 

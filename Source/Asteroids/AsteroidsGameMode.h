@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Messanger.h"
 #include "GameFramework/GameModeBase.h"
 #include "AsteroidsGameMode.generated.h"
 
@@ -14,6 +15,11 @@ class AAsteroidsGameMode : public AGameModeBase
 public:
 	AAsteroidsGameMode();
 
+	UFUNCTION(BlueprintCallable, Category = "Messanger")
+	UMessanger* GetMessanger();
+
+private:
+	UMessanger* Messanger;
 };
 
 

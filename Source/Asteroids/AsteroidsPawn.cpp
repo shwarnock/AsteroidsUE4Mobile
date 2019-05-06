@@ -9,12 +9,14 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
 #include "OffScreenUtil.h"
+#include "Asteroid.h"
+#include "AsteroidsGameMode.h"
 
 const FName AAsteroidsPawn::MoveForwardBinding("MoveForward");
 const FName AAsteroidsPawn::MoveRightBinding("MoveRight");
 
 AAsteroidsPawn::AAsteroidsPawn()
-{	
+{
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> ShipMesh(TEXT("/Game/Asteroids/Meshes/TwinStickUFO.TwinStickUFO"));
 	// Create the mesh component
 	ShipMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShipMesh"));
@@ -22,9 +24,11 @@ AAsteroidsPawn::AAsteroidsPawn()
 	ShipMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 	ShipMeshComponent->SetStaticMesh(ShipMesh.Object);
 	ShipMeshComponent->SetWorldLocation(FVector::ZeroVector);
+	ShipMeshComponent->BodyInstance.SetCollisionProfileName("Player");
 	RootComponent->SetWorldLocation(FVector::ZeroVector);
 	SetActorLocation(FVector::ZeroVector);
-	
+	ShipMeshComponent->OnComponentHit.AddDynamic(this, &AAsteroidsPawn::OnHit);
+
 	// Cache our sound effect
 	static ConstructorHelpers::FObjectFinder<USoundBase> FireAudio(TEXT("/Game/Asteroids/Audio/TwinStickFire.TwinStickFire"));
 	FireSound = FireAudio.Object;
@@ -39,6 +43,10 @@ AAsteroidsPawn::AAsteroidsPawn()
 
 	playerMaxHealth = 100.0f;
 	playerCurrentHealth = 100.0f;
+
+	damageTimeDelay = 1;
+	currentDamageTimeDelay = 0;
+	damageTimerActive = false;
 }
 
 void AAsteroidsPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -50,11 +58,6 @@ void AAsteroidsPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis(MoveRightBinding);
 }
 
-void AAsteroidsPawn::DealDamage(float damage)
-{
-	playerCurrentHealth -= damage;
-}
-
 void AAsteroidsPawn::HandleAcceleration(FVector direction, float DeltaSeconds)
 {
 	if (MoveSpeed.X < MaxSpeed.X && MoveSpeed.Y < MaxSpeed.Y)
@@ -64,8 +67,32 @@ void AAsteroidsPawn::HandleAcceleration(FVector direction, float DeltaSeconds)
 	}
 }
 
+void AAsteroidsPawn::DealDamage(float damage)
+{
+	if (!damageTimerActive)
+	{
+		playerCurrentHealth -= damage;
+		AAsteroidsGameMode* gameMode = (AAsteroidsGameMode*)GetWorld()->GetAuthGameMode();
+		FMessage message = FMessage();
+		message.messageType = EMessageTypes::Float;
+		message.floatMessage = playerCurrentHealth / playerMaxHealth;
+		gameMode->GetMessanger()->UpdatePlayerHealth(message);
+	}
+}
+
 void AAsteroidsPawn::Tick(float DeltaSeconds)
 {
+	if (damageTimerActive)
+	{
+		currentDamageTimeDelay += DeltaSeconds;
+	}
+
+	if (currentDamageTimeDelay >= damageTimeDelay)
+	{
+		damageTimerActive = false;
+		currentDamageTimeDelay = 0;
+	}
+
 	// Find movement direction
 	const float ForwardValue = GetInputAxisValue(MoveForwardBinding);
 	const float RightValue = GetInputAxisValue(MoveRightBinding);
@@ -134,5 +161,15 @@ void AAsteroidsPawn::FireShot()
 void AAsteroidsPawn::ShotTimerExpired()
 {
 	bCanFire = true;
+}
+
+void AAsteroidsPawn::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	FName pro = OtherComp->GetCollisionProfileName();
+	if (OtherComp->GetCollisionProfileName() == FName("Asteroid"))
+	{
+		DealDamage(10);
+		damageTimerActive = true;
+	}
 }
 

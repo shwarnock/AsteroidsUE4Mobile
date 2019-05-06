@@ -21,6 +21,16 @@ void UOffScreenUtil::SetScreenSize()
 	ScreenSize.Y = Result.Y;
 }
 
+FVector2D UOffScreenUtil::GetScreenSize()
+{
+	if (ScreenSize.X == 0)
+	{
+		SetScreenSize();
+	}
+
+	return ScreenSize;
+}
+
 bool UOffScreenUtil::CheckForOffScreen(AActor* actor)
 {
 	FVector2D ScreenLocation = FVector2D::ZeroVector;
@@ -81,4 +91,6 @@ void UOffScreenUtil::UpdateActorLocationWhenOffScreen(AActor* actor)
 		newLocation.Z = 0;
 		actor->SetActorLocation(newLocation);
 	}
+
+
 }

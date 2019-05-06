@@ -23,6 +23,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Screen Check")
 	static bool CheckForOffScreen(AActor* actor);
 
+	static FVector2D GetScreenSize();
+
 private:
 	static void SetScreenSize();
 	static FVector2D ScreenSize;
