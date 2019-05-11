@@ -5,7 +5,7 @@
 #include "OffScreenUtil.h"
 #include "Asteroid.h"
 #include "Messanger.h"
-#include "AsteroidsGameMode.h"
+#include "AsteroidsGameInstance.h"
 
 // Sets default values
 AAsteroidManager::AAsteroidManager()
@@ -14,7 +14,7 @@ AAsteroidManager::AAsteroidManager()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void AAsteroidManager::RespondAsteroidDestroyed(FMessage message)
+void AAsteroidManager::HandleAsteroidDestroyed(FMessage message)
 {
 	FVector AsteroidCurrentPos = message.messageCurrentPos;
 	ESizes::SIZE newAsteroidSize;
@@ -36,12 +36,9 @@ void AAsteroidManager::RespondAsteroidDestroyed(FMessage message)
 	}
 }
 
-// Called when the game starts or when spawned
-void AAsteroidManager::BeginPlay()
+void AAsteroidManager::EndPlay(EEndPlayReason::Type EndPlayReason)
 {
-	Super::BeginPlay();
-	AAsteroidsGameMode* gameMode = (AAsteroidsGameMode*)GetWorld()->GetAuthGameMode();
-	gameMode->GetMessanger()->OnAsteroidDestroyed.AddDynamic(this, &AAsteroidManager::RespondAsteroidDestroyed);
+	Super::EndPlay(EndPlayReason);
 }
 
 void AAsteroidManager::Initialize()
@@ -52,6 +49,9 @@ void AAsteroidManager::Initialize()
 		FVector StartPos = GetStartPos(startSide);
 		CreateAsteroid(StartPos, startSide, ESizes::Large);
 	}
+
+	UAsteroidsGameInstance* gameInstance = (UAsteroidsGameInstance*) GetWorld()->GetGameInstance();
+	gameInstance->GetMessanger()->OnAsteroidDestroyed.AddDynamic(this, &AAsteroidManager::HandleAsteroidDestroyed);
 }
 
 FVector AAsteroidManager::GetStartPos(EStartSides::START_SIDE side)
@@ -87,7 +87,5 @@ void AAsteroidManager::CreateAsteroid(FVector startPos, EStartSides::START_SIDE 
 	FRotator Rotation(0.0f, 0.0f, 0.0f);
 	FActorSpawnParameters SpawnInfo;
 	GetWorld()->SpawnActor<AAsteroid>(startPos, Rotation, SpawnInfo)->Initialize(startSide, size);
-
-	Destroy();
 }
 

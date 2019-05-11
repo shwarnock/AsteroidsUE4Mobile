@@ -10,7 +10,7 @@
 #include "Sound/SoundBase.h"
 #include "OffScreenUtil.h"
 #include "Asteroid.h"
-#include "AsteroidsGameMode.h"
+#include "AsteroidsGameInstance.h"
 
 const FName AAsteroidsPawn::MoveForwardBinding("MoveForward");
 const FName AAsteroidsPawn::MoveRightBinding("MoveRight");
@@ -71,12 +71,23 @@ void AAsteroidsPawn::DealDamage(float damage)
 {
 	if (!damageTimerActive)
 	{
+		UAsteroidsGameInstance* gameInstance = (UAsteroidsGameInstance*)GetWorld()->GetGameInstance();
 		playerCurrentHealth -= damage;
-		AAsteroidsGameMode* gameMode = (AAsteroidsGameMode*)GetWorld()->GetAuthGameMode();
-		FMessage message = FMessage();
-		message.messageType = EMessageTypes::Float;
-		message.floatMessage = playerCurrentHealth / playerMaxHealth;
-		gameMode->GetMessanger()->UpdatePlayerHealth(message);
+
+		if (playerCurrentHealth == 0)
+		{
+			gameInstance->GetMessanger()->PlayerDied();
+
+		}
+		else
+		{
+			FMessage message = FMessage();
+			message.messageType = EMessageTypes::Float;
+			message.floatMessage = playerCurrentHealth / playerMaxHealth;
+
+			gameInstance->GetMessanger()->UpdatePlayerHealth(message);
+		}
+		
 	}
 }
 

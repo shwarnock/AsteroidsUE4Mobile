@@ -11,6 +11,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDamageDealtDelegate, FMessage, message);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAsteroidDestroyedDelegate, FMessage, message);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerDiedDelegate);
 
 UCLASS()
 class ASTEROIDS_API UMessanger : public UObject
@@ -24,7 +25,11 @@ public:
 	UPROPERTY()
 	FAsteroidDestroyedDelegate OnAsteroidDestroyed;
 
+	UPROPERTY(BlueprintAssignable)
+	FPlayerDiedDelegate OnPlayerDied;
+
 public:
 	void UpdatePlayerHealth(FMessage message);
 	void AsteroidDestroyed(FMessage message);
+	void PlayerDied();
 };

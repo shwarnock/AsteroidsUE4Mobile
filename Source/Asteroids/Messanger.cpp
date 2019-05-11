@@ -12,3 +12,8 @@ void UMessanger::AsteroidDestroyed(FMessage message)
 {
 	OnAsteroidDestroyed.Broadcast(message);
 }
+
+void UMessanger::PlayerDied()
+{
+	OnPlayerDied.Broadcast();
+}

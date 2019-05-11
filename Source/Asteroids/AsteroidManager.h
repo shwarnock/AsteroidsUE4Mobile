@@ -16,12 +16,11 @@ public:
 	// Sets default values for this actor's properties
 	AAsteroidManager();
 
-	UFUNCTION(BlueprintCallable, Category = Gameplay)
+	UFUNCTION()
 	void Initialize();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 
 private:
 	const int SCREEN_BUFFER = 40;
@@ -31,5 +30,5 @@ private:
 	void CreateAsteroid(FVector startPos, EStartSides::START_SIDE startSide, ESizes::SIZE size);
 
 	UFUNCTION()
-	void RespondAsteroidDestroyed(FMessage message);
+	void HandleAsteroidDestroyed(FMessage message);
 };

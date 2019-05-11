@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Messanger.h"
 #include "GameFramework/GameModeBase.h"
+#include "AsteroidManager.h"
 #include "AsteroidsGameMode.generated.h"
 
 UCLASS(MinimalAPI)
@@ -15,11 +16,17 @@ class AAsteroidsGameMode : public AGameModeBase
 public:
 	AAsteroidsGameMode();
 
-	UFUNCTION(BlueprintCallable, Category = "Messanger")
-	UMessanger* GetMessanger();
+protected:
+	virtual void PostInitializeComponents() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 private:
-	UMessanger* Messanger;
+
+	UPROPERTY()
+	AAsteroidManager* asteroidManager;
+
+	UFUNCTION()
+	void InitializeAsteroidManager();
 };
 
 

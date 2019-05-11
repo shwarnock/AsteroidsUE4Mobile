@@ -5,8 +5,8 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
 #include "AsteroidsProjectile.h"
-#include "AsteroidsGameMode.h"
 #include "OffScreenUtil.h"
+#include "AsteroidsGameInstance.h"
 
 // Sets default values
 AAsteroid::AAsteroid()
@@ -86,11 +86,11 @@ void AAsteroid::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimiti
 {
 	if (OtherComp->GetCollisionProfileName() == "Projectile")
 	{
-		AAsteroidsGameMode* gameMode = (AAsteroidsGameMode*)GetWorld()->GetAuthGameMode();
-
 		FMessage message = FMessage();
 		message.messageAsteroidSize = Size;
 		message.messageCurrentPos = GetActorLocation();
-		gameMode->GetMessanger()->AsteroidDestroyed(message);
+		UAsteroidsGameInstance* gameInstance = (UAsteroidsGameInstance*)GetWorld()->GetGameInstance();
+		gameInstance->GetMessanger()->AsteroidDestroyed(message);
+		Destroy();
 	}
 }
