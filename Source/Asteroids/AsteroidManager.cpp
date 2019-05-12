@@ -12,13 +12,15 @@ AAsteroidManager::AAsteroidManager()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	currentAsteroidCount = 0;
 }
 
 void AAsteroidManager::HandleAsteroidDestroyed(FMessage message)
 {
-	FVector AsteroidCurrentPos = message.messageCurrentPos;
+	FVector AsteroidCurrentPos = message.currentPosMessage;
 	ESizes::SIZE newAsteroidSize;
-	switch (message.messageAsteroidSize)
+	switch (message.asteroidSizeMessage)
 	{
 	case ESizes::Large:
 		newAsteroidSize = ESizes::Medium;
@@ -33,6 +35,13 @@ void AAsteroidManager::HandleAsteroidDestroyed(FMessage message)
 		{
 			CreateAsteroid(AsteroidCurrentPos, EStartSides::None, newAsteroidSize);
 		}
+	}
+
+	currentAsteroidCount -= message.intMessage;
+
+	if (currentAsteroidCount == 0)
+	{
+		//Start next level callback
 	}
 }
 
@@ -87,5 +96,6 @@ void AAsteroidManager::CreateAsteroid(FVector startPos, EStartSides::START_SIDE 
 	FRotator Rotation(0.0f, 0.0f, 0.0f);
 	FActorSpawnParameters SpawnInfo;
 	GetWorld()->SpawnActor<AAsteroid>(startPos, Rotation, SpawnInfo)->Initialize(startSide, size);
+	currentAsteroidCount++;
 }
 

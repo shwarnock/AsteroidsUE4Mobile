@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "AsteroidsProjectile.h"
+#include "Messanger.h"
 #include "AsteroidsPawn.generated.h"
 
 UCLASS(Blueprintable)
@@ -67,11 +67,14 @@ public:
 	static const FName MoveRightBinding;
 	static const FName FireBinding;
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	const FVector MaxSpeed = FVector(1000.0, 1000.0, 0);
 
 	const int MAX_BULLETS = 2;
-	TArray<AAsteroidsProjectile*> bullets;
+	int currentBullets;
 
 	void HandleAcceleration(FVector direction, float DeltaSeconds);
 
@@ -85,6 +88,10 @@ private:
 	float damageTimeDelay;
 	float currentDamageTimeDelay;
 
+	UMessanger* messanger;
+
+	UFUNCTION()
+	void HandleBulletDestroyed(FMessage message);
 public:
 	/** Returns ShipMeshComponent subobject **/
 	FORCEINLINE class UStaticMeshComponent* GetShipMeshComponent() const { return ShipMeshComponent; }

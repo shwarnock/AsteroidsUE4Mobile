@@ -8,8 +8,8 @@
 #include "Engine/StaticMesh.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
+
 #include "OffScreenUtil.h"
-#include "Asteroid.h"
 #include "AsteroidsGameInstance.h"
 
 const FName AAsteroidsPawn::MoveForwardBinding("MoveForward");
@@ -47,6 +47,8 @@ AAsteroidsPawn::AAsteroidsPawn()
 	damageTimeDelay = 1;
 	currentDamageTimeDelay = 0;
 	damageTimerActive = false;
+
+	currentBullets = 0;
 }
 
 void AAsteroidsPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -67,25 +69,41 @@ void AAsteroidsPawn::HandleAcceleration(FVector direction, float DeltaSeconds)
 	}
 }
 
+void AAsteroidsPawn::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UAsteroidsGameInstance* gameInstance = (UAsteroidsGameInstance*)GetWorld()->GetGameInstance();
+	messanger = gameInstance->GetMessanger();
+	messanger->OnFireButtonPressed.AddDynamic(this, &AAsteroidsPawn::FireShot);
+	messanger->OnBulletDestroyed.AddDynamic(this, &AAsteroidsPawn::HandleBulletDestroyed);
+}
+
+void AAsteroidsPawn::HandleBulletDestroyed(FMessage message)
+{
+	currentBullets -= message.intMessage;
+}
 void AAsteroidsPawn::DealDamage(float damage)
 {
 	if (!damageTimerActive)
 	{
-		UAsteroidsGameInstance* gameInstance = (UAsteroidsGameInstance*)GetWorld()->GetGameInstance();
+
 		playerCurrentHealth -= damage;
 
 		if (playerCurrentHealth == 0)
 		{
-			gameInstance->GetMessanger()->PlayerDied();
-
+			 messanger->PlayerDied();
+			 Destroy();
+			 APlayerController* playerController = UGameplayStatics::GetPlayerController(this->GetWorld(), 0);
+			 playerController->DisableInput(playerController);
 		}
 		else
 		{
 			FMessage message = FMessage();
-			message.messageType = EMessageTypes::Float;
+			message.typeMessage = EMessageTypes::Float;
 			message.floatMessage = playerCurrentHealth / playerMaxHealth;
 
-			gameInstance->GetMessanger()->UpdatePlayerHealth(message);
+			messanger->UpdatePlayerHealth(message);
 		}
 		
 	}
@@ -127,21 +145,13 @@ void AAsteroidsPawn::Tick(float DeltaSeconds)
 	MoveSpeed.X -= MoveSpeed.X * .02;
 	MoveSpeed.Y -= MoveSpeed.Y * .02;
 
-	for (int i = bullets.Num() - 1; i >= 0; --i)
-	{
-		if (bullets[i]->IsPendingKill() || !bullets[i]->IsValidLowLevel())
-		{
-			bullets.RemoveAt(i);
-		}
-	}
-
 	UOffScreenUtil::UpdateActorLocationWhenOffScreen(this);
 }
 
 void AAsteroidsPawn::FireShot()
 {
 	// If it's ok to fire again
-	if (bullets.Num() < 2)
+	if (currentBullets < 2)
 	{
 		const FVector FireDirection = GetActorForwardVector();
 		const FRotator FireRotation = FireDirection.Rotation();
@@ -152,7 +162,7 @@ void AAsteroidsPawn::FireShot()
 		if (World != NULL)
 		{
 			// spawn the projectile
-			bullets.Add(World->SpawnActor<AAsteroidsProjectile>(SpawnLocation, FireRotation));
+			AAsteroidsProjectile* bullet = World->SpawnActor<AAsteroidsProjectile>(SpawnLocation, FireRotation);
 		}
 
 		bCanFire = false;
@@ -166,6 +176,7 @@ void AAsteroidsPawn::FireShot()
 		}
 
 		bCanFire = false;
+		currentBullets++;
 	}
 }
 

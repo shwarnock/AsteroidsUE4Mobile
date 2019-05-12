@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Messanger.h"
 #include "AsteroidsProjectile.generated.h"
 
 class UProjectileMovementComponent;
@@ -22,6 +23,9 @@ class AAsteroidsProjectile : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* ProjectileMovement;
 
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	AAsteroidsProjectile();
 
@@ -36,5 +40,8 @@ public:
 
 private:
 	virtual void Tick(float DeltaTime) override;
+	void DestroyProjectile();
+
+	UMessanger* messanger;
 };
 

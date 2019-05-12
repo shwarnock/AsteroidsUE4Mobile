@@ -17,3 +17,13 @@ void UMessanger::PlayerDied()
 {
 	OnPlayerDied.Broadcast();
 }
+
+void UMessanger::FireShot()
+{
+	OnFireButtonPressed.Broadcast();
+}
+
+void UMessanger::BulletDestroyed(FMessage message)
+{
+	OnBulletDestroyed.Broadcast(message);
+}

@@ -7,6 +7,7 @@
 #include "Engine/StaticMesh.h"
 #include "Engine.h"
 #include "OffScreenUtil.h"
+#include "AsteroidsGameInstance.h"
 
 AAsteroidsProjectile::AAsteroidsProjectile() 
 {
@@ -43,11 +44,28 @@ void AAsteroidsProjectile::Tick(float DeltaTime)
 {
 	if (UOffScreenUtil::CheckForOffScreen(this))
 	{
-		Destroy();
+		DestroyProjectile();
 	}
+}
+
+void AAsteroidsProjectile::DestroyProjectile()
+{
+	FMessage message;
+	message.intMessage = 1;
+
+	messanger->BulletDestroyed(message);
+	Destroy();
 }
 
 void AAsteroidsProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	Destroy();
+	DestroyProjectile();
+}
+
+void AAsteroidsProjectile::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UAsteroidsGameInstance* gameInstance = (UAsteroidsGameInstance*)GetWorld()->GetGameInstance();
+	messanger = gameInstance->GetMessanger();
 }

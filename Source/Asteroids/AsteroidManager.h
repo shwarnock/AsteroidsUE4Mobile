@@ -25,6 +25,7 @@ protected:
 private:
 	const int SCREEN_BUFFER = 40;
 
+	int currentAsteroidCount;
 	FVector GetStartPos(EStartSides::START_SIDE side);
 
 	void CreateAsteroid(FVector startPos, EStartSides::START_SIDE startSide, ESizes::SIZE size);

@@ -53,13 +53,13 @@ struct FMessage
 	FString stringMessage = "";
 
 	UPROPERTY(BlueprintReadOnly)
-	TEnumAsByte<EMessageTypes::Type> messageType;
+	TEnumAsByte<EMessageTypes::Type> typeMessage;
 
 	UPROPERTY(BlueprintReadOnly)
-	TEnumAsByte<ESizes::SIZE> messageAsteroidSize;
+	TEnumAsByte<ESizes::SIZE> asteroidSizeMessage;
 
 	UPROPERTY(BlueprintReadOnly)
-	FVector messageCurrentPos;
+	FVector currentPosMessage;
 
 public:
 };
