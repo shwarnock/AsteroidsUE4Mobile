@@ -4,7 +4,6 @@
 #include "AsteroidManager.h"
 #include "OffScreenUtil.h"
 #include "Asteroid.h"
-#include "Messanger.h"
 #include "AsteroidsGameInstance.h"
 
 // Sets default values
@@ -14,34 +13,46 @@ AAsteroidManager::AAsteroidManager()
 	PrimaryActorTick.bCanEverTick = true;
 
 	currentAsteroidCount = 0;
+	spawnMultiplier = 0;
 }
 
 void AAsteroidManager::HandleAsteroidDestroyed(FMessage message)
 {
 	FVector AsteroidCurrentPos = message.currentPosMessage;
 	ESizes::SIZE newAsteroidSize;
+
+	FMessage scoreMessage = FMessage();
 	switch (message.asteroidSizeMessage)
 	{
 	case ESizes::Large:
+		scoreMessage.intMessage = 20 * spawnMultiplier;
+		messanger->UpdatePlayerScore(scoreMessage);
 		newAsteroidSize = ESizes::Medium;
-		for (int k = 0; k < 3; ++k)
+		for (int k = 0; k < spawnMultiplier; ++k)
 		{
 			CreateAsteroid(AsteroidCurrentPos, EStartSides::None, newAsteroidSize);
 		}
 		break;
 	case ESizes::Medium:
+		scoreMessage.intMessage = 15 * spawnMultiplier;
+		messanger->UpdatePlayerScore(scoreMessage);
 		newAsteroidSize = ESizes::Small;
-		for (int k = 0; k < 3; ++k)
+		for (int k = 0; k < spawnMultiplier; ++k)
 		{
 			CreateAsteroid(AsteroidCurrentPos, EStartSides::None, newAsteroidSize);
 		}
+		break;
+	case ESizes::Small:
+		scoreMessage.intMessage = 10 * spawnMultiplier;
+		messanger->UpdatePlayerScore(scoreMessage);
+		break;
 	}
 
 	currentAsteroidCount -= message.intMessage;
 
 	if (currentAsteroidCount == 0)
 	{
-		//Start next level callback
+		SpawnLevelInitialAsteroids(spawnMultiplier + 1);
 	}
 }
 
@@ -50,17 +61,23 @@ void AAsteroidManager::EndPlay(EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
-void AAsteroidManager::Initialize()
+void AAsteroidManager::Initialize(int currentLevel)
 {
-	for (int i = 0; i < 5; ++i)
+	UAsteroidsGameInstance* gameInstance = (UAsteroidsGameInstance*) GetWorld()->GetGameInstance();
+	messanger = gameInstance->GetMessanger();
+	messanger->OnAsteroidDestroyed.AddDynamic(this, &AAsteroidManager::HandleAsteroidDestroyed);
+	SpawnLevelInitialAsteroids(currentLevel);
+}
+
+void AAsteroidManager::SpawnLevelInitialAsteroids(int currentLevel)
+{
+	spawnMultiplier = currentLevel;
+	for (int i = 0; i < spawnMultiplier; ++i)
 	{
 		EStartSides::START_SIDE startSide = EStartSides::START_SIDE(rand() % 4);
 		FVector StartPos = GetStartPos(startSide);
 		CreateAsteroid(StartPos, startSide, ESizes::Large);
 	}
-
-	UAsteroidsGameInstance* gameInstance = (UAsteroidsGameInstance*) GetWorld()->GetGameInstance();
-	gameInstance->GetMessanger()->OnAsteroidDestroyed.AddDynamic(this, &AAsteroidManager::HandleAsteroidDestroyed);
 }
 
 FVector AAsteroidManager::GetStartPos(EStartSides::START_SIDE side)

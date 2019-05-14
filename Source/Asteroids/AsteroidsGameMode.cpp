@@ -33,5 +33,5 @@ void AAsteroidsGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void AAsteroidsGameMode::InitializeAsteroidManager()
 {
-	asteroidManager->Initialize();
+	asteroidManager->Initialize(1);
 }

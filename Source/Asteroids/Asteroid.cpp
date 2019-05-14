@@ -87,10 +87,9 @@ void AAsteroid::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimiti
 	if (OtherComp->GetCollisionProfileName() == "Projectile")
 	{
 		FMessage message = FMessage();
+		message.intMessage = 1;
 		message.asteroidSizeMessage = Size;
 		message.currentPosMessage = GetActorLocation();
-		message.intMessage = 1;
-
 		UAsteroidsGameInstance* gameInstance = (UAsteroidsGameInstance*)GetWorld()->GetGameInstance();
 		gameInstance->GetMessanger()->AsteroidDestroyed(message);
 		Destroy();

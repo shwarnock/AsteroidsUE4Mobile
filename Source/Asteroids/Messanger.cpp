@@ -13,9 +13,9 @@ void UMessanger::AsteroidDestroyed(FMessage message)
 	OnAsteroidDestroyed.Broadcast(message);
 }
 
-void UMessanger::PlayerDied()
+void UMessanger::PlayerDied(FMessage message)
 {
-	OnPlayerDied.Broadcast();
+	OnPlayerDied.Broadcast(message);
 }
 
 void UMessanger::FireShot()
@@ -26,4 +26,14 @@ void UMessanger::FireShot()
 void UMessanger::BulletDestroyed(FMessage message)
 {
 	OnBulletDestroyed.Broadcast(message);
+}
+
+void UMessanger::UpdatePlayerScore(FMessage message)
+{
+	OnUpdatePlayerScore.Broadcast(message);
+}
+
+void UMessanger::PlayerScoreWasUpdated(FMessage message)
+{
+	OnPlayerScoreWasUpdated.Broadcast(message);
 }

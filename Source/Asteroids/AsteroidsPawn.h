@@ -65,7 +65,6 @@ public:
 	// Static names for axis bindings
 	static const FName MoveForwardBinding;
 	static const FName MoveRightBinding;
-	static const FName FireBinding;
 
 protected:
 	virtual void BeginPlay() override;
@@ -90,8 +89,14 @@ private:
 
 	UMessanger* messanger;
 
+	int playerScore;
+
 	UFUNCTION()
 	void HandleBulletDestroyed(FMessage message);
+
+	UFUNCTION()
+	void HandleUpdatePlayerScore(FMessage message);
+
 public:
 	/** Returns ShipMeshComponent subobject **/
 	FORCEINLINE class UStaticMeshComponent* GetShipMeshComponent() const { return ShipMeshComponent; }

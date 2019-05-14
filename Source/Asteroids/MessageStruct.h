@@ -10,6 +10,7 @@ namespace EMessageTypes
 		Float,
 		Int,
 		String,
+		None
 	};
 }
 
@@ -20,7 +21,8 @@ namespace ESizes
 	{
 		Large,
 		Medium,
-		Small
+		Small,
+		None
 	};
 }
 
@@ -43,14 +45,16 @@ struct FMessage
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly)
-	float floatMessage = NAN;
+public:
 
 	UPROPERTY(BlueprintReadOnly)
-	int intMessage = NAN;
+	float floatMessage;
 
 	UPROPERTY(BlueprintReadOnly)
-	FString stringMessage = "";
+	int intMessage;
+
+	UPROPERTY(BlueprintReadOnly)
+	FString stringMessage;
 
 	UPROPERTY(BlueprintReadOnly)
 	TEnumAsByte<EMessageTypes::Type> typeMessage;
@@ -60,6 +64,4 @@ struct FMessage
 
 	UPROPERTY(BlueprintReadOnly)
 	FVector currentPosMessage;
-
-public:
 };

@@ -5,14 +5,15 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Delegates/Delegate.h"
-#include "Union.h"
 #include "MessageStruct.h"
 #include "Messanger.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDamageDealtDelegate, FMessage, message);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAsteroidDestroyedDelegate, FMessage, message);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBulletDestroyedDelegate, FMessage, message);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerDiedDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUpdatePlayerScoreDelegate, FMessage, message);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerScoreWasUpdatedDelegate, FMessage, message);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerDiedDelegate, FMessage, message);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFireButtonPressedDelegate);
 
 UCLASS()
@@ -36,11 +37,19 @@ public:
 	UPROPERTY()
 	FBulletDestroyedDelegate OnBulletDestroyed;
 
+	UPROPERTY()
+	FUpdatePlayerScoreDelegate OnUpdatePlayerScore;
+
+	UPROPERTY(BlueprintAssignable)
+	FPlayerScoreWasUpdatedDelegate OnPlayerScoreWasUpdated;
+
 public:
 	void UpdatePlayerHealth(FMessage message);
 	void AsteroidDestroyed(FMessage message);
 	void BulletDestroyed(FMessage message);
-	void PlayerDied();
+	void UpdatePlayerScore(FMessage message);
+	void PlayerScoreWasUpdated(FMessage message);
+	void PlayerDied(FMessage message);
 
 	UFUNCTION(BlueprintCallable)
 	void FireShot();

@@ -49,6 +49,8 @@ AAsteroidsPawn::AAsteroidsPawn()
 	damageTimerActive = false;
 
 	currentBullets = 0;
+
+	playerScore = 0;
 }
 
 void AAsteroidsPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -58,6 +60,8 @@ void AAsteroidsPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	// set up gameplay key bindings
 	PlayerInputComponent->BindAxis(MoveForwardBinding);
 	PlayerInputComponent->BindAxis(MoveRightBinding);
+
+	PlayerInputComponent->BindAction("FireBullet", IE_Pressed, this, &AAsteroidsPawn::FireShot);
 }
 
 void AAsteroidsPawn::HandleAcceleration(FVector direction, float DeltaSeconds)
@@ -77,6 +81,7 @@ void AAsteroidsPawn::BeginPlay()
 	messanger = gameInstance->GetMessanger();
 	messanger->OnFireButtonPressed.AddDynamic(this, &AAsteroidsPawn::FireShot);
 	messanger->OnBulletDestroyed.AddDynamic(this, &AAsteroidsPawn::HandleBulletDestroyed);
+	messanger->OnUpdatePlayerScore.AddDynamic(this, &AAsteroidsPawn::HandleUpdatePlayerScore);
 }
 
 void AAsteroidsPawn::HandleBulletDestroyed(FMessage message)
@@ -87,26 +92,32 @@ void AAsteroidsPawn::DealDamage(float damage)
 {
 	if (!damageTimerActive)
 	{
-
 		playerCurrentHealth -= damage;
 
 		if (playerCurrentHealth == 0)
 		{
-			 messanger->PlayerDied();
-			 Destroy();
-			 APlayerController* playerController = UGameplayStatics::GetPlayerController(this->GetWorld(), 0);
-			 playerController->DisableInput(playerController);
+			FMessage message = FMessage();
+			message.intMessage = playerScore;
+			messanger->PlayerDied(message);
+			Destroy();
+			APlayerController* playerController = UGameplayStatics::GetPlayerController(this->GetWorld(), 0);
+			playerController->DisableInput(playerController);
 		}
 		else
 		{
 			FMessage message = FMessage();
-			message.typeMessage = EMessageTypes::Float;
 			message.floatMessage = playerCurrentHealth / playerMaxHealth;
-
 			messanger->UpdatePlayerHealth(message);
-		}
-		
+		}	
 	}
+}
+
+void AAsteroidsPawn::HandleUpdatePlayerScore(FMessage message)
+{
+	playerScore += message.intMessage;
+
+	message.intMessage = playerScore;
+	messanger->PlayerScoreWasUpdated(message);
 }
 
 void AAsteroidsPawn::Tick(float DeltaSeconds)

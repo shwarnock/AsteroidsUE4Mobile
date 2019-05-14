@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MessageStruct.h"
+#include "Messanger.h"
 #include "AsteroidManager.generated.h"
 
 UCLASS()
@@ -17,13 +18,15 @@ public:
 	AAsteroidManager();
 
 	UFUNCTION()
-	void Initialize();
+	void Initialize(int currentLevel);
 
 protected:
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 
 private:
 	const int SCREEN_BUFFER = 40;
+
+	void SpawnLevelInitialAsteroids(int currentLevel);
 
 	int currentAsteroidCount;
 	FVector GetStartPos(EStartSides::START_SIDE side);
@@ -32,4 +35,8 @@ private:
 
 	UFUNCTION()
 	void HandleAsteroidDestroyed(FMessage message);
+
+	int spawnMultiplier;
+
+	UMessanger* messanger;
 };

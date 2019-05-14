@@ -50,9 +50,8 @@ void AAsteroidsProjectile::Tick(float DeltaTime)
 
 void AAsteroidsProjectile::DestroyProjectile()
 {
-	FMessage message;
+	FMessage message = FMessage();
 	message.intMessage = 1;
-
 	messanger->BulletDestroyed(message);
 	Destroy();
 }
