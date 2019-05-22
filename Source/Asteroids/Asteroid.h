@@ -38,4 +38,6 @@ private:
 	ESizes::SIZE Size;
 	EStartSides::START_SIDE StartSide;
 	FVector MoveDirection;
+	FVector rotationSpeed;
+	FRotator rotation;
 };

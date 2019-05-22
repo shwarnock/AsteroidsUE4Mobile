@@ -6,7 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
 #include "Engine.h"
-#include "OffScreenUtil.h"
+#include "ScreenUtil.h"
 #include "AsteroidsGameInstance.h"
 
 AAsteroidsProjectile::AAsteroidsProjectile() 
@@ -17,7 +17,7 @@ AAsteroidsProjectile::AAsteroidsProjectile()
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
 	// Static reference to the mesh to use for the projectile
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> ProjectileMeshAsset(TEXT("/Game/Asteroids/Meshes/TwinStickProjectile.TwinStickProjectile"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> ProjectileMeshAsset(TEXT("/Game/Asteroids/Meshes/Projectile/TwinStickProjectile.TwinStickProjectile"));
 
 	// Create mesh component for the projectile sphere
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh0"));
@@ -42,7 +42,7 @@ AAsteroidsProjectile::AAsteroidsProjectile()
 
 void AAsteroidsProjectile::Tick(float DeltaTime) 
 {
-	if (UOffScreenUtil::CheckForOffScreen(this))
+	if (UScreenUtil::CheckForOffScreen(this))
 	{
 		DestroyProjectile();
 	}

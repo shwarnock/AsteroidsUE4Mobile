@@ -5,7 +5,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
 #include "AsteroidsProjectile.h"
-#include "OffScreenUtil.h"
+#include "ScreenUtil.h"
 #include "AsteroidsGameInstance.h"
 
 // Sets default values
@@ -14,7 +14,7 @@ AAsteroid::AAsteroid()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> AsteroidMesh(TEXT("/Game/Asteroids/Meshes/Asteroid.Asteroid"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> AsteroidMesh(TEXT("/Game/Asteroids/Meshes/Asteroid/Asteroid.Asteroid"));
 	// Create the mesh component
 	AsteroidMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AsteroidMesh"));
 	RootComponent = AsteroidMeshComponent;
@@ -39,7 +39,11 @@ void AAsteroid::Tick(float DeltaTime)
 	FVector CurrentLocation = GetActorLocation();
 	FVector Movement = MoveDirection * MoveSpeed + CurrentLocation;
 	SetActorLocation(Movement);
-	UOffScreenUtil::UpdateActorLocationWhenOffScreen(this);
+
+	FVector rotationDelta = rotationSpeed * DeltaTime;
+	rotation.Add(rotationDelta.X, rotationDelta.Y, 0);
+	SetActorRotation(rotation);
+	UScreenUtil::UpdateActorLocationWhenOffScreen(this);
 }
 
 void AAsteroid::Initialize(EStartSides::START_SIDE startSide, ESizes::SIZE size)
@@ -69,7 +73,7 @@ void AAsteroid::Initialize(EStartSides::START_SIDE startSide, ESizes::SIZE size)
 			break;
 		}
 
-		SetActorScale3D(FVector(FMath::RandRange(5.0f, 7.0f), FMath::RandRange(5.0f, 7.0f), FMath::RandRange(5.0f, 7.0f)));
+		SetActorScale3D(FVector(FMath::RandRange(1.0f, 1.0f), FMath::RandRange(1.0f, 1.0f), FMath::RandRange(1.0f, 1.0f)));
 		break;
 	case ESizes::Medium:
 		MoveDirection = FVector(FMath::RandRange(-1.0f, 1.0f), FMath::RandRange(-1.0f, 1.0f), 0);
@@ -80,6 +84,9 @@ void AAsteroid::Initialize(EStartSides::START_SIDE startSide, ESizes::SIZE size)
 		SetActorScale3D(FVector(FMath::RandRange(1.0f, 3.0f), FMath::RandRange(1.0f, 3.0f), FMath::RandRange(1.0f, 3.0f)));
 		break;
 	}
+
+	rotationSpeed = FVector(FMath::RandRange(20, 120), FMath::RandRange(20, 120), 0);
+	rotation = FRotator(FMath::RandRange(0, 360), FMath::RandRange(0, 360), FMath::RandRange(0, 360));
 }
 
 void AAsteroid::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)

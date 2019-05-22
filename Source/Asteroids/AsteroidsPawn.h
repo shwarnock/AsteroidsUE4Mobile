@@ -97,6 +97,9 @@ private:
 	UFUNCTION()
 	void HandleUpdatePlayerScore(FMessage message);
 
+	UFUNCTION()
+	void HandleHealthPackPickedUp(FMessage message);
+
 public:
 	/** Returns ShipMeshComponent subobject **/
 	FORCEINLINE class UStaticMeshComponent* GetShipMeshComponent() const { return ShipMeshComponent; }

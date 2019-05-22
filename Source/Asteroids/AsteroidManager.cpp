@@ -2,7 +2,7 @@
 
 
 #include "AsteroidManager.h"
-#include "OffScreenUtil.h"
+#include "ScreenUtil.h"
 #include "Asteroid.h"
 #include "AsteroidsGameInstance.h"
 
@@ -78,11 +78,15 @@ void AAsteroidManager::SpawnLevelInitialAsteroids(int currentLevel)
 		FVector StartPos = GetStartPos(startSide);
 		CreateAsteroid(StartPos, startSide, ESizes::Large);
 	}
+
+	FMessage message = FMessage();
+	message.intMessage = spawnMultiplier;
+	messanger->UpdateLevel(message);
 }
 
 FVector AAsteroidManager::GetStartPos(EStartSides::START_SIDE side)
 {
-	FVector2D ScreenSize = UOffScreenUtil::GetScreenSize();
+	FVector2D ScreenSize = UScreenUtil::GetScreenSize();
 	APlayerController* playerController = UGameplayStatics::GetPlayerController(this->GetWorld(), 0);
 
 	FVector NewLocation;

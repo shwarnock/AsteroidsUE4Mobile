@@ -9,7 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
 
-#include "OffScreenUtil.h"
+#include "ScreenUtil.h"
 #include "AsteroidsGameInstance.h"
 
 const FName AAsteroidsPawn::MoveForwardBinding("MoveForward");
@@ -17,14 +17,14 @@ const FName AAsteroidsPawn::MoveRightBinding("MoveRight");
 
 AAsteroidsPawn::AAsteroidsPawn()
 {
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> ShipMesh(TEXT("/Game/Asteroids/Meshes/TwinStickUFO.TwinStickUFO"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> ShipMesh(TEXT("/Game/Asteroids/Meshes/PlayerPawn/TwinStickUFO.TwinStickUFO"));
 	// Create the mesh component
 	ShipMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShipMesh"));
 	RootComponent = ShipMeshComponent;
 	ShipMeshComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 	ShipMeshComponent->SetStaticMesh(ShipMesh.Object);
 	ShipMeshComponent->SetWorldLocation(FVector::ZeroVector);
-	ShipMeshComponent->BodyInstance.SetCollisionProfileName("Player");
+	ShipMeshComponent->BodyInstance.SetCollisionProfileName("Pawn");
 	RootComponent->SetWorldLocation(FVector::ZeroVector);
 	SetActorLocation(FVector::ZeroVector);
 	ShipMeshComponent->OnComponentHit.AddDynamic(this, &AAsteroidsPawn::OnHit);
@@ -82,6 +82,7 @@ void AAsteroidsPawn::BeginPlay()
 	messanger->OnFireButtonPressed.AddDynamic(this, &AAsteroidsPawn::FireShot);
 	messanger->OnBulletDestroyed.AddDynamic(this, &AAsteroidsPawn::HandleBulletDestroyed);
 	messanger->OnUpdatePlayerScore.AddDynamic(this, &AAsteroidsPawn::HandleUpdatePlayerScore);
+	messanger->OnHealthPackPickedUp.AddDynamic(this, &AAsteroidsPawn::HandleHealthPackPickedUp);
 }
 
 void AAsteroidsPawn::HandleBulletDestroyed(FMessage message)
@@ -156,7 +157,7 @@ void AAsteroidsPawn::Tick(float DeltaSeconds)
 	MoveSpeed.X -= MoveSpeed.X * .02;
 	MoveSpeed.Y -= MoveSpeed.Y * .02;
 
-	UOffScreenUtil::UpdateActorLocationWhenOffScreen(this);
+	UScreenUtil::UpdateActorLocationWhenOffScreen(this);
 }
 
 void AAsteroidsPawn::FireShot()
@@ -206,3 +207,15 @@ void AAsteroidsPawn::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPr
 	}
 }
 
+void AAsteroidsPawn::HandleHealthPackPickedUp(FMessage message)
+{
+	playerCurrentHealth += message.floatMessage;
+	if (playerCurrentHealth > 100)
+	{
+		playerCurrentHealth = 100;
+	}
+
+	FMessage newHealthMessage = FMessage();
+	newHealthMessage.floatMessage = playerCurrentHealth / playerMaxHealth;
+	messanger->UpdatePlayerHealth(newHealthMessage);
+}

@@ -37,3 +37,13 @@ void UMessanger::PlayerScoreWasUpdated(FMessage message)
 {
 	OnPlayerScoreWasUpdated.Broadcast(message);
 }
+
+void UMessanger::HealthPackPickedUp(FMessage message)
+{
+	OnHealthPackPickedUp.Broadcast(message);
+}
+
+void UMessanger::UpdateLevel(FMessage message)
+{
+	OnLevelIsUpdated.Broadcast(message);
+}
