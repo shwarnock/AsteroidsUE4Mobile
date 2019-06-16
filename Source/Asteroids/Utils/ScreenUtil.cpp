@@ -5,7 +5,6 @@
 
 
 FVector2D UScreenUtil::ScreenSize = FVector2D(0, 0);
-float UScreenUtil::ScreenBuffer = 20.0f;
 APlayerController* UScreenUtil::PlayerController = nullptr;
 
 void UScreenUtil::SetScreenSize()
@@ -62,7 +61,7 @@ bool UScreenUtil::CheckForOffScreen(AActor* actor)
 	return false;
 }
 
-void UScreenUtil::UpdateActorLocationWhenOffScreen(AActor* actor)
+void UScreenUtil::UpdateActorLocationWhenOffScreen(AActor* actor, float buffer)
 {
 	FVector2D ScreenLocation = FVector2D::ZeroVector;
 	APlayerController* playerController = UGameplayStatics::GetPlayerController(actor->GetWorld(), 0);
@@ -78,27 +77,27 @@ void UScreenUtil::UpdateActorLocationWhenOffScreen(AActor* actor)
 		SetScreenSize();
 	}
 
-	if (ScreenLocation.X > ScreenSize.X + ScreenBuffer)
+	if (ScreenLocation.X > ScreenSize.X + buffer)
 	{
-		ScreenLocation.X = -ScreenBuffer;
+		ScreenLocation.X = -buffer;
 		newLocation = GetWorldPosFromScreenPos(ScreenLocation, actor);
 		actor->SetActorLocation(newLocation);
 	}
-	else if (ScreenLocation.X < -ScreenBuffer)
+	else if (ScreenLocation.X < -buffer)
 	{
-		ScreenLocation.X = ScreenSize.X + ScreenBuffer;
+		ScreenLocation.X = ScreenSize.X + buffer;
 		newLocation = GetWorldPosFromScreenPos(ScreenLocation, actor);
 		actor->SetActorLocation(newLocation);
 	}
-	else if (ScreenLocation.Y > ScreenSize.Y + ScreenBuffer)
+	else if (ScreenLocation.Y > ScreenSize.Y + buffer)
 	{
-		ScreenLocation.Y = -ScreenBuffer;
+		ScreenLocation.Y = -buffer;
 		newLocation = GetWorldPosFromScreenPos(ScreenLocation, actor);
 		actor->SetActorLocation(newLocation);
 	}
-	else if (ScreenLocation.Y < -ScreenBuffer)
+	else if (ScreenLocation.Y < -buffer)
 	{
-		ScreenLocation.Y = ScreenSize.Y + ScreenBuffer;
+		ScreenLocation.Y = ScreenSize.Y + buffer;
 		newLocation = GetWorldPosFromScreenPos(ScreenLocation, actor);
 		actor->SetActorLocation(newLocation);
 	}

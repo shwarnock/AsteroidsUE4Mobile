@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Messanger.h"
+#include "Utils/Messanger.h"
 #include "GameFramework/GameModeBase.h"
 #include "AsteroidManager.h"
 #include "AsteroidsGameMode.generated.h"

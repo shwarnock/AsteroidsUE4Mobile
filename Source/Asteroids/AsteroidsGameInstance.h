@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "Messanger.h"
+#include "Utils/Messanger.h"
 #include "AsteroidsGameInstance.generated.h"
 
 UCLASS()

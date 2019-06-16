@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Messanger.h"
+#include "Utils/Messanger.h"
 #include "AsteroidsPawn.generated.h"
 
 UCLASS(Blueprintable)
@@ -16,14 +16,20 @@ class AAsteroidsPawn : public APawn
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* ShipMeshComponent;
 
+	/* The Smoke component*/
+	UPROPERTY(VisibleAnywhere, Category = "ParticleEffect")
+	class UParticleSystemComponent* SmokeComponent;
+
+	/* The Fire Component */
+	UPROPERTY(VisibleAnywhere, Category = "ParticleEffect")
+	class UParticleSystemComponent* FireComponent;
+	
+	/* The Explosion Component */
+	UPROPERTY(VisibleAnywhere, Category = "ParticleEffect")
+	class UParticleSystemComponent* ExplosionComponent;
+
 public:
 	AAsteroidsPawn();
-
-	UPROPERTY(Category = Gameplay, BlueprintReadOnly)
-	float playerCurrentHealth;
-	
-	UPROPERTY(Category = gameplay, BlueprintReadOnly)
-	float playerMaxHealth;
 
 	UFUNCTION(BlueprintCallable, Category = Gameplay)
 	void DealDamage(float damageAmount);
@@ -70,6 +76,18 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	float playerCurrentHealth;
+	float playerMaxHealth;
+
+	float playerCurrentShields;
+	float playerMaxShields;
+	float shieldRegenDelay;
+	float shieldRegenTimer;
+	bool shieldTimerActive;
+	float shieldRegenRate;
+
+	void RegenerateShields(float DeltaSeconds);
+
 	const FVector MaxSpeed = FVector(1000.0, 1000.0, 0);
 
 	const int MAX_BULLETS = 2;
@@ -99,6 +117,9 @@ private:
 
 	UFUNCTION()
 	void HandleHealthPackPickedUp(FMessage message);
+
+	UFUNCTION()
+	void DestroyPawn();
 
 public:
 	/** Returns ShipMeshComponent subobject **/

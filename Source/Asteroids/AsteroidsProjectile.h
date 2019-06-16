@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Messanger.h"
+#include "Utils/Messanger.h"
 #include "AsteroidsProjectile.generated.h"
 
 class UProjectileMovementComponent;

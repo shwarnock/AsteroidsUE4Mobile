@@ -5,7 +5,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
 #include "AsteroidsProjectile.h"
-#include "ScreenUtil.h"
+#include "Utils/ScreenUtil.h"
 #include "AsteroidsGameInstance.h"
 
 // Sets default values
@@ -43,7 +43,7 @@ void AAsteroid::Tick(float DeltaTime)
 	FVector rotationDelta = rotationSpeed * DeltaTime;
 	rotation.Add(rotationDelta.X, rotationDelta.Y, 0);
 	SetActorRotation(rotation);
-	UScreenUtil::UpdateActorLocationWhenOffScreen(this);
+	UScreenUtil::UpdateActorLocationWhenOffScreen(this, buffer);
 }
 
 void AAsteroid::Initialize(EStartSides::START_SIDE startSide, ESizes::SIZE size)
@@ -54,7 +54,7 @@ void AAsteroid::Initialize(EStartSides::START_SIDE startSide, ESizes::SIZE size)
 
 	switch (Size)
 	{
-	float coefficient;
+	float coefficient, scale;
 	case ESizes::Large:
 		coefficient = FMath::RandRange(-1.0f, 1.0f);
 		switch (StartSide)
@@ -73,19 +73,26 @@ void AAsteroid::Initialize(EStartSides::START_SIDE startSide, ESizes::SIZE size)
 			break;
 		}
 
-		SetActorScale3D(FVector(FMath::RandRange(1.0f, 1.0f), FMath::RandRange(1.0f, 1.0f), FMath::RandRange(1.0f, 1.0f)));
+		scale = FMath::RandRange(7.0, 9.0F);
+		SetActorScale3D(FVector(scale));
+		buffer = 75.0f;
 		break;
 	case ESizes::Medium:
 		MoveDirection = FVector(FMath::RandRange(-1.0f, 1.0f), FMath::RandRange(-1.0f, 1.0f), 0);
-		SetActorScale3D(FVector(FMath::RandRange(3.0f, 5.0f), FMath::RandRange(3.0f, 5.0f), FMath::RandRange(3.0f, 5.0f)));
+		scale = FMath::RandRange(4.0f, 6.0f);
+		SetActorScale3D(FVector(scale));
+		buffer = 45.0f;
 		break;
 	case ESizes::Small:
 		MoveDirection = FVector(FMath::RandRange(-1.0f, 1.0f), FMath::RandRange(-1.0f, 1.0f), 0);
-		SetActorScale3D(FVector(FMath::RandRange(1.0f, 3.0f), FMath::RandRange(1.0f, 3.0f), FMath::RandRange(1.0f, 3.0f)));
+		scale = FMath::RandRange(1.0f, 3.0f);
+		SetActorScale3D(FVector(scale));
+		buffer = 20.0f;
 		break;
 	}
 
-	rotationSpeed = FVector(FMath::RandRange(20, 120), FMath::RandRange(20, 120), 0);
+	float speed = FMath::RandRange(20, 120);
+	rotationSpeed = FVector(speed, 0, speed);
 	rotation = FRotator(FMath::RandRange(0, 360), FMath::RandRange(0, 360), FMath::RandRange(0, 360));
 }
 

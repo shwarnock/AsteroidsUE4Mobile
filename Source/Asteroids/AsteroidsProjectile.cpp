@@ -6,7 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
 #include "Engine.h"
-#include "ScreenUtil.h"
+#include "Utils/ScreenUtil.h"
 #include "AsteroidsGameInstance.h"
 
 AAsteroidsProjectile::AAsteroidsProjectile() 

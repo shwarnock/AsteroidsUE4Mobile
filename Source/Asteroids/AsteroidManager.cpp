@@ -2,7 +2,7 @@
 
 
 #include "AsteroidManager.h"
-#include "ScreenUtil.h"
+#include "Utils/ScreenUtil.h"
 #include "Asteroid.h"
 #include "AsteroidsGameInstance.h"
 

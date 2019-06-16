@@ -4,7 +4,7 @@
 #include "HealthPack.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
-#include "ScreenUtil.h"
+#include "Utils/ScreenUtil.h"
 #include "AsteroidsGameInstance.h"
 
 // Sets default values
@@ -19,7 +19,6 @@ AHealthPack::AHealthPack()
 	StaticMeshComponent->SetWorldLocation(FVector::ZeroVector);
 	StaticMeshComponent->BodyInstance.SetCollisionProfileName(TEXT("Pickup"));
 	StaticMeshComponent->OnComponentHit.AddDynamic(this, &AHealthPack::OnHit);
-
 }
 
 // Called when the game starts or when spawned

@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "MessageStruct.h"
-#include "Messanger.h"
+#include "Utils/MessageStruct.h"
+#include "Utils/Messanger.h"
 #include "AsteroidManager.generated.h"
 
 UCLASS()

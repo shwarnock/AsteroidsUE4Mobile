@@ -28,7 +28,7 @@ protected:
 
 private:
 
-	float SpawnBuffer = 20.0f;
+	float SpawnBuffer = 50.0f;
 
 	float HealthIncrease = 20.0f;
 

@@ -47,3 +47,8 @@ void UMessanger::UpdateLevel(FMessage message)
 {
 	OnLevelIsUpdated.Broadcast(message);
 }
+
+void UMessanger::ShieldsUpdated(FMessage message)
+{
+	OnShieldsUpdated.Broadcast(message);
+}

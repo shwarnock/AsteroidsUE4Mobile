@@ -18,7 +18,7 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Screen Check")
-	static void UpdateActorLocationWhenOffScreen(AActor* actor);
+	static void UpdateActorLocationWhenOffScreen(AActor* actor, float buffer);
 
 	UFUNCTION(BlueprintCallable, Category = "Screen Check")
 	static bool CheckForOffScreen(AActor* actor);
@@ -30,7 +30,6 @@ public:
 private:
 	static void SetScreenSize();
 	static FVector2D ScreenSize;
-	static float ScreenBuffer;
 
 	static APlayerController* PlayerController;
 };

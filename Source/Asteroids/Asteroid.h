@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Messanger.h"
+#include "Utils/Messanger.h"
 #include "GameFramework/Actor.h"
 #include "Asteroid.generated.h"
 
@@ -40,4 +40,5 @@ private:
 	FVector MoveDirection;
 	FVector rotationSpeed;
 	FRotator rotation;
+	float buffer;
 };
