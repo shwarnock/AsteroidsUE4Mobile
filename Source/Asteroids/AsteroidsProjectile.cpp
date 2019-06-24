@@ -58,7 +58,7 @@ void AAsteroidsProjectile::DestroyProjectile()
 
 void AAsteroidsProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	DestroyProjectile();
+ 	DestroyProjectile();
 }
 
 void AAsteroidsProjectile::BeginPlay()

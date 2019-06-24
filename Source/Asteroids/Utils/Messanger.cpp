@@ -52,3 +52,8 @@ void UMessanger::ShieldsUpdated(FMessage message)
 {
 	OnShieldsUpdated.Broadcast(message);
 }
+
+void UMessanger::NewHighScore(FMessage message)
+{
+	OnNewHighScore.Broadcast(message);
+}

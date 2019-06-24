@@ -10,6 +10,7 @@
 #include "Sound/SoundBase.h"
 #include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
 #include "Utils/MessageStruct.h"
+#include "Utils/HighScoreCalculator.h"
 
 #include "Utils/ScreenUtil.h"
 #include "AsteroidsGameInstance.h"
@@ -73,7 +74,7 @@ AAsteroidsPawn::AAsteroidsPawn()
 
 	playerMaxShields = 100.0f;
 	playerCurrentShields = 100.0f;
-	shieldRegenDelay = 3.0f;
+	shieldRegenDelay = 6.0f;
 	shieldRegenTimer = 0.0f;
 	shieldRegenRate = 10.0f;
 	shieldTimerActive = false;
@@ -150,9 +151,19 @@ void AAsteroidsPawn::DealDamage(float damage)
 
 		if (playerCurrentHealth <= 0.0f)
 		{
-			FMessage message = FMessage();
-			message.intMessage = playerScore;
-			messanger->PlayerDied(message);
+			if (UHighScoreCalculator::IsNewHighScore(playerScore))
+			{
+				FMessage message;
+				message.intMessage = playerScore;
+				messanger->NewHighScore(message);
+			}
+			else
+			{
+				FMessage message = FMessage();
+				message.intMessage = playerScore;
+				messanger->PlayerDied(message);
+			}
+
 			SmokeComponent->SetHiddenInGame(true);
 			FireComponent->SetHiddenInGame(true);
 

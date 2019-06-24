@@ -18,7 +18,7 @@ AAsteroidManager::AAsteroidManager()
 
 void AAsteroidManager::HandleAsteroidDestroyed(FMessage message)
 {
-	FVector AsteroidCurrentPos = message.currentPosMessage;
+ 	FVector AsteroidCurrentPos = message.currentPosMessage;
 	ESizes::SIZE newAsteroidSize;
 
 	FMessage scoreMessage = FMessage();

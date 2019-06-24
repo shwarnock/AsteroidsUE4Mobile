@@ -39,7 +39,6 @@ namespace EStartSides
 	};
 }
 
-
 USTRUCT(BlueprintType)
 struct FMessage
 {
@@ -50,7 +49,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	float floatMessage;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	int intMessage;
 
 	UPROPERTY(BlueprintReadOnly)
@@ -64,4 +63,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	FVector currentPosMessage;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool isNewHighScore;
 };

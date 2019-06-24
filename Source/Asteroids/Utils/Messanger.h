@@ -17,6 +17,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerDiedDelegate, FMessage, messa
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHealthPackDelegate, FMessage, message);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FShieldsUpdatedDelegate, FMessage, message);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUpdateLevelDelegate, FMessage, message);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNewHighScoreDelegate, FMessage, message);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFireButtonPressedDelegate);
 
 UCLASS()
@@ -55,16 +56,22 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FShieldsUpdatedDelegate OnShieldsUpdated;
 
+	UPROPERTY(BlueprintAssignable)
+	FNewHighScoreDelegate OnNewHighScore;
+
 public:
 	void UpdatePlayerHealth(FMessage message);
 	void AsteroidDestroyed(FMessage message);
 	void BulletDestroyed(FMessage message);
 	void UpdatePlayerScore(FMessage message);
 	void PlayerScoreWasUpdated(FMessage message);
-	void PlayerDied(FMessage message);
 	void HealthPackPickedUp(FMessage message);
 	void UpdateLevel(FMessage message);
 	void ShieldsUpdated(FMessage message);
+	void NewHighScore(FMessage message);
+
+	UFUNCTION(BlueprintCallable)
+	void PlayerDied(FMessage message);
 
 	UFUNCTION(BlueprintCallable)
 	void FireShot();
