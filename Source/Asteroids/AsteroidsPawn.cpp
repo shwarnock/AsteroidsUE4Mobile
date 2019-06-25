@@ -85,6 +85,8 @@ AAsteroidsPawn::AAsteroidsPawn()
 	currentBullets = 0;
 
 	playerScore = 0;
+	
+	isDead = false;
 }
 
 void AAsteroidsPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -151,13 +153,13 @@ void AAsteroidsPawn::DealDamage(float damage)
 
 		if (playerCurrentHealth <= 0.0f)
 		{
-			if (UHighScoreCalculator::IsNewHighScore(playerScore))
+			if (UHighScoreCalculator::IsNewHighScore(playerScore) && !isDead)
 			{
 				FMessage message;
 				message.intMessage = playerScore;
 				messanger->NewHighScore(message);
 			}
-			else
+			else if (!isDead)
 			{
 				FMessage message = FMessage();
 				message.intMessage = playerScore;
@@ -179,6 +181,8 @@ void AAsteroidsPawn::DealDamage(float damage)
 			FTimerDelegate TimerDel;
 			TimerDel.BindUFunction(this, FName("DestroyPawn"));
 			GetWorldTimerManager().SetTimer(UnusedHandle, TimerDel, 1.0f, false);
+
+			isDead = true;
 		}
 		else
 		{
@@ -191,7 +195,7 @@ void AAsteroidsPawn::DealDamage(float damage)
 
 		if (playerCurrentHealth < 50.0f)
 		{
-			SmokeComponent->ActivateSystem();
+ 			SmokeComponent->ActivateSystem();
 		}
 
 		if (playerCurrentHealth < 25.0f)

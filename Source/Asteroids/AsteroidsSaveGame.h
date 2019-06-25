@@ -18,5 +18,4 @@ class ASTEROIDS_API UAsteroidsSaveGame : public USaveGame
 public:
 	UPROPERTY(BlueprintReadWrite)
 	TArray<FHighScore> highScores;
-	
 };

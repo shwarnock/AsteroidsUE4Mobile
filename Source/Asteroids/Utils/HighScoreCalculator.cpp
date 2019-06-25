@@ -38,6 +38,10 @@ void UHighScoreCalculator::SetNewHighScores(FHighScore newHighScore)
 		savedGame = Cast<UAsteroidsSaveGame>(UGameplayStatics::CreateSaveGameObject(UAsteroidsSaveGame::StaticClass()));
 		TArray<FHighScore> highScores;
 		highScores.Add(newHighScore);
+		for (int i = 1; i < MAX_HIGH_SCORES; ++i)
+		{
+			highScores.Add(FHighScore(FText::FromString("AAA"), 0));
+		}
 		savedGame->highScores = highScores;
 		UGameplayStatics::SaveGameToSlot(savedGame, "SaveGame", 0);
 		return;
@@ -49,6 +53,7 @@ void UHighScoreCalculator::SetNewHighScores(FHighScore newHighScore)
 		if (newHighScore.highScore > highScores[i].highScore)
 		{
 			highScores.Insert(newHighScore, i);
+			break;
 		}
 	}
 

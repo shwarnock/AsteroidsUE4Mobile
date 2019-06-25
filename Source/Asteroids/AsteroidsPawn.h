@@ -76,6 +76,7 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	bool isDead;
 	float playerCurrentHealth;
 	float playerMaxHealth;
 

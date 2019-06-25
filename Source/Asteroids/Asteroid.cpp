@@ -56,7 +56,7 @@ void AAsteroid::Initialize(EStartSides::START_SIDE startSide, ESizes::SIZE size)
 	{
 	float coefficient, scale;
 	case ESizes::Large:
-		coefficient = FMath::RandRange(-1.0f, 1.0f);
+		coefficient = FMath::RandRange(-0.9f, 0.9f);
 		switch (StartSide)
 		{
 		case EStartSides::Left:
@@ -85,7 +85,7 @@ void AAsteroid::Initialize(EStartSides::START_SIDE startSide, ESizes::SIZE size)
 		break;
 	case ESizes::Small:
 		MoveDirection = FVector(FMath::RandRange(-1.0f, 1.0f), FMath::RandRange(-1.0f, 1.0f), 0);
-		scale = FMath::RandRange(1.0f, 3.0f);
+		scale = FMath::RandRange(2.0f, 3.0f);
 		SetActorScale3D(FVector(scale));
 		buffer = 20.0f;
 		break;
